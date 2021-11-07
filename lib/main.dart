@@ -1,14 +1,21 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 import 'package:p_c_t/my_pets.dart';
 import 'package:p_c_t/new_pet.dart';
 
 void main() {
   runApp(const P_C_T());
-  runApp(MaterialApp(initialRoute: '/home', routes: {
-    '/home': (context) => const P_C_T(),
-    '/myPets': (context) => const MyPets(),
-    '/addPet': (context) => const AddPet()
-  }));
+  runApp(
+    MaterialApp(
+      initialRoute: '/home',
+      routes: {
+        '/home': (context) => const P_C_T(),
+        '/myPets': (context) => const MyPets(),
+        '/addPet': (context) => const AddPet()
+      },
+    ),
+  );
 }
 
 class P_C_T extends StatelessWidget {

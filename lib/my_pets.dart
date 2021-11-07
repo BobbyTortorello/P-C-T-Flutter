@@ -18,13 +18,15 @@ class MyPets extends StatelessWidget {
               child: const Icon(Icons.add))
         ],
       ),
-      body: ListViewLayout(),
+      body: const ListViewLayout(),
       backgroundColor: Colors.white,
     );
   }
 }
 
 class ListViewLayout extends StatelessWidget {
+  const ListViewLayout({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return listView(context);
@@ -32,16 +34,16 @@ class ListViewLayout extends StatelessWidget {
 }
 
 Widget listView(BuildContext context) {
-  final myPets = [Pet];
+  List<Pet> myPets = [];
 
   return ListView.separated(
     padding: const EdgeInsets.all(8),
     itemCount: myPets.length,
     itemBuilder: (context, i) {
-      return const ListTile(
-        leading: Icon(Icons.ac_unit),
-        title: Text("{myPets(getName)[i]}"),
-        subtitle: Text('data'),
+      return ListTile(
+        leading: myPets[i].petImage,
+        title: Text(myPets[i].petName),
+        subtitle: Text(myPets[i].petType + " " + myPets[i].petBreed),
       );
     },
     separatorBuilder: (context, index) => const Divider(

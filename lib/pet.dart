@@ -7,8 +7,4 @@ class Pet {
   Image petImage;
 
   Pet(this.petName, this.petType, this.petBreed, this.petImage);
-
-  String getName() {
-    return petName;
-  }
 }
