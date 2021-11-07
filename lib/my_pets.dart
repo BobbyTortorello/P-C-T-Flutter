@@ -10,6 +10,13 @@ class MyPets extends StatelessWidget {
       appBar: AppBar(
         title: const Text('My Pets'),
         centerTitle: true,
+        actions: <Widget>[
+          ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/addPet');
+              },
+              child: const Icon(Icons.add))
+        ],
       ),
       body: ListViewLayout(),
       backgroundColor: Colors.white,
@@ -30,10 +37,10 @@ Widget listView(BuildContext context) {
   return ListView.separated(
     padding: const EdgeInsets.all(8),
     itemCount: myPets.length,
-    itemBuilder: (context, index) {
+    itemBuilder: (context, i) {
       return const ListTile(
         leading: Icon(Icons.ac_unit),
-        title: Text('myPets[index]'),
+        title: Text("{myPets(getName)[i]}"),
         subtitle: Text('data'),
       );
     },
