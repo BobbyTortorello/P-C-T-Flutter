@@ -4,7 +4,12 @@ class Pet {
   String petName;
   String petType;
   String petBreed;
-  Image petImage;
+  //Image petImage;
 
-  Pet(this.petName, this.petType, this.petBreed, this.petImage);
+  Pet(
+    this.petName,
+    this.petType,
+    this.petBreed,
+    /*this.petImage*/
+  );
 }

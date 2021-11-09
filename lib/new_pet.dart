@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:p_c_t/pet.dart';
 
 class AddPet extends StatelessWidget {
   const AddPet({Key? key}) : super(key: key);
@@ -50,88 +51,87 @@ class AddPetFormState extends State<AddPetForm> {
           children: [
             TextField(
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(), hintText: 'Enter Pet Name'),
+                border: OutlineInputBorder(),
+                hintText: 'Enter Pet Name',
+              ),
               controller: petNameField,
             ),
             const SizedBox(
-              height: 2,
+              height: 15,
             ),
             TextField(
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(), hintText: 'Enter Pet Type'),
+                border: OutlineInputBorder(),
+                hintText: 'Enter Pet Type',
+              ),
               controller: petTypeField,
             ),
             const SizedBox(
-              height: 2,
+              height: 15,
             ),
             TextField(
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(), hintText: 'Enter Pet Breed'),
+                border: OutlineInputBorder(),
+                hintText: 'Enter Pet Breed',
+              ),
               controller: petBreedField,
             ),
             const SizedBox(
-              height: 2,
+              height: 15,
             ),
-            //const PhotoLibrary()
+            ElevatedButton(
+              onPressed: () {
+                showOptions(context);
+              },
+              child: const Text('Pick a Pet Picture'),
+            ),
+            const SizedBox(
+              height: 75,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                petName = petNameField.text;
+                petType = petTypeField.text;
+                petBreed = petBreedField.text;
+                Pet newPet = Pet(petName, petType, petBreed);
+                Navigator.pushNamed(context, '/myPets');
+                const BackButtonIcon();
+              },
+              child: const Text('Save Pet Information'),
+            ),
           ],
         ),
       ),
     );
   }
+
+  void showOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Column(
+          children: <Widget>[
+            const ListTile(
+              leading: Icon(Icons.photo_camera),
+              title: Text('Take Picture with Camera'),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.pop(context);
+                showPhotoLibrary();
+              },
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Choose from Photo Library'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void showPhotoLibrary() async {
+    final imageFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    //print(file.path);
+  }
 }
-
-// class PhotoLibrary extends StatelessWidget {
-//   const PhotoLibrary({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SafeArea(
-//         child: Column(
-//           children: <Widget>[
-//             Image.asset(),
-//             ElevatedButton(
-//               onPressed: () {
-//                 showOptions(context);
-//               },
-//               child: const Text('Enter Pet Image'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   void showOptions(BuildContext context) {
-//     showModalBottomSheet(
-//       context: context,
-//       builder: (context) {
-//         return Container(
-//           height: 100,
-//           child: Column(
-//             children: <Widget>[
-//               const ListTile(
-//                 leading: Icon(Icons.photo_camera),
-//                 title: Text('Take Picture with Camera'),
-//               ),
-//               ListTile(
-//                 onTap: () {
-//                   Navigator.pop(context);
-//                   _showPhotoLibrary();
-//                 },
-//                 leading: const Icon(Icons.photo_library),
-//                 title: const Text('Choose from Photo Library'),
-//               )
-//             ],
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-
-// class Photo extends State<
-// void _showPhotoLibrary() async {
-//   final file = await ImagePicker().getImage(source: ImageSource.gallery);
-//   print(file.path);
-// }
