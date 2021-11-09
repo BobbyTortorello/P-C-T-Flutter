@@ -6,21 +6,76 @@ class MyPets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Pets'),
-        centerTitle: true,
-        actions: <Widget>[
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/addPet');
-              },
-              child: const Icon(Icons.add))
-        ],
+    String intendedRoute;
+    return MaterialApp(
+      theme: ThemeData(
+        bottomSheetTheme:
+            const BottomSheetThemeData(backgroundColor: Colors.black),
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.green),
       ),
-      body: const ListViewLayout(),
-      backgroundColor: Colors.white,
+      // home: Scaffold(
+      //   appBar: AppBar(
+      //     title: const Text('My Pets'),
+      //     centerTitle: true,
+      //     actions: <Widget>[
+      //       ElevatedButton(
+      //         onPressed: () {
+      //           Navigator.pushNamed(context, '/addPet');
+      //         },
+      //         child: const Icon(Icons.add),
+      //       )
+      //     ],
+      //     automaticallyImplyLeading: false,
+      //   ),
+      //   body: const ListViewLayout(),
+      // ),
+      home: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('My Pets'),
+            centerTitle: true,
+            actions: <Widget>[
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/addPet');
+                },
+                child: const Icon(Icons.add),
+              )
+            ],
+            automaticallyImplyLeading: false,
+          ),
+          body: const ListViewLayout(),
+          bottomSheet: TabBar(
+            tabs: [
+              Tab(
+                icon: Icon(Icons.directions_car),
+                text: 'My Pets',
+                intendedRoute = '/myPets',
+                navigate(context, intendedRoute),
+              ),
+              Tab(
+                icon: Icon(Icons.directions_car),
+                text: 'Lost Pets',
+                intendedRoute = '/lostPets',
+                navigate(context, intendedRoute),
+              ),
+              Tab(
+                icon: Icon(Icons.directions_car),
+                text: 'Settings Pets',
+                intendedRoute = '/addPets',
+                navigate(context, intendedRoute),
+              ),
+            ],
+            onTap: ,
+          ),
+        ),
+      ),
     );
+  }
+
+  void navigate(BuildContext context, String route) {
+    Navigator.pushNamed(context, route);
   }
 }
 
@@ -41,7 +96,7 @@ Widget listView(BuildContext context) {
     itemCount: myPets.length,
     itemBuilder: (context, i) {
       return ListTile(
-        leading: myPets[i].petImage,
+        //leading: myPets[i].petImage,
         title: Text(myPets[i].petName),
         subtitle: Text(myPets[i].petType + " " + myPets[i].petBreed),
       );
