@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:p_c_t/my_pets.dart';
 import 'package:p_c_t/pet.dart';
 
 class AddPet extends StatelessWidget {
@@ -94,8 +95,8 @@ class AddPetFormState extends State<AddPetForm> {
                 petType = petTypeField.text;
                 petBreed = petBreedField.text;
                 Pet newPet = Pet(petName, petType, petBreed);
+                myPets.add(newPet);
                 Navigator.pushNamed(context, '/myPets');
-                const BackButtonIcon();
               },
               child: const Text('Save Pet Information'),
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:p_c_t/main.dart';
+import 'package:p_c_t/new_pet.dart';
 import 'package:p_c_t/pet.dart';
 
 class MyPets extends StatelessWidget {
@@ -23,24 +24,25 @@ class MyPets extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
       ),
-      body: const ListViewLayout(),
+      body: listView(context),
       bottomSheet: const bottomBar(),
     );
   }
 }
 
 class ListViewLayout extends StatelessWidget {
-  const ListViewLayout({Key? key}) : super(key: key);
+  const ListViewLayout({Key? key, required this.myPet}) : super(key: key);
 
+  final Pet myPet;
   @override
   Widget build(BuildContext context) {
     return listView(context);
   }
 }
 
-Widget listView(BuildContext context) {
-  List<Pet> myPets = [];
+List<Pet> myPets = [];
 
+Widget listView(BuildContext context) {
   return ListView.separated(
     padding: const EdgeInsets.all(8),
     itemCount: myPets.length,
