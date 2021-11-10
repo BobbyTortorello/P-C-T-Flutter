@@ -13,7 +13,7 @@ import 'package:p_c_t/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const P_C_T());
+    await tester.pumpWidget(const PCT());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

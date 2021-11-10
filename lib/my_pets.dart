@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:p_c_t/main.dart';
 import 'package:p_c_t/pet.dart';
 
 class MyPets extends StatelessWidget {
@@ -6,76 +7,25 @@ class MyPets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String intendedRoute;
-    return MaterialApp(
-      theme: ThemeData(
-        bottomSheetTheme:
-            const BottomSheetThemeData(backgroundColor: Colors.black),
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.green),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Pets'),
+        centerTitle: true,
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/addPet');
+            },
+            child: const Icon(Icons.add),
+            style: ElevatedButton.styleFrom(primary: Colors.transparent),
+          )
+        ],
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.green,
       ),
-      // home: Scaffold(
-      //   appBar: AppBar(
-      //     title: const Text('My Pets'),
-      //     centerTitle: true,
-      //     actions: <Widget>[
-      //       ElevatedButton(
-      //         onPressed: () {
-      //           Navigator.pushNamed(context, '/addPet');
-      //         },
-      //         child: const Icon(Icons.add),
-      //       )
-      //     ],
-      //     automaticallyImplyLeading: false,
-      //   ),
-      //   body: const ListViewLayout(),
-      // ),
-      home: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('My Pets'),
-            centerTitle: true,
-            actions: <Widget>[
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/addPet');
-                },
-                child: const Icon(Icons.add),
-              )
-            ],
-            automaticallyImplyLeading: false,
-          ),
-          body: const ListViewLayout(),
-          bottomSheet: TabBar(
-            tabs: [
-              Tab(
-                icon: Icon(Icons.directions_car),
-                text: 'My Pets',
-                intendedRoute = '/myPets',
-                navigate(context, intendedRoute),
-              ),
-              Tab(
-                icon: Icon(Icons.directions_car),
-                text: 'Lost Pets',
-                intendedRoute = '/lostPets',
-                navigate(context, intendedRoute),
-              ),
-              Tab(
-                icon: Icon(Icons.directions_car),
-                text: 'Settings Pets',
-                intendedRoute = '/addPets',
-                navigate(context, intendedRoute),
-              ),
-            ],
-            onTap: ,
-          ),
-        ),
-      ),
+      body: const ListViewLayout(),
+      bottomSheet: const bottomBar(),
     );
-  }
-
-  void navigate(BuildContext context, String route) {
-    Navigator.pushNamed(context, route);
   }
 }
 

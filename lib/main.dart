@@ -1,25 +1,29 @@
 // ignore_for_file: camel_case_types
 
 import 'package:flutter/material.dart';
+import 'package:p_c_t/lost_pets.dart';
 import 'package:p_c_t/my_pets.dart';
 import 'package:p_c_t/new_pet.dart';
+import 'package:p_c_t/settings.dart';
 
 void main() {
-  runApp(const P_C_T());
+  runApp(const PCT());
   runApp(
     MaterialApp(
       initialRoute: '/home',
       routes: {
-        '/home': (context) => const P_C_T(),
+        '/home': (context) => const PCT(),
         '/myPets': (context) => const MyPets(),
-        '/addPet': (context) => const AddPet()
+        '/addPet': (context) => const AddPet(),
+        '/lostPets': (context) => const LostPets(),
+        '/settings': (context) => const Settings()
       },
     ),
   );
 }
 
-class P_C_T extends StatelessWidget {
-  const P_C_T({Key? key}) : super(key: key);
+class PCT extends StatelessWidget {
+  const PCT({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,20 +55,65 @@ class P_C_T extends StatelessWidget {
             const SizedBox(height: 100),
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/lostPets');
+                },
                 child: const Text('Lost Pets'),
               ),
             ),
             const SizedBox(height: 100),
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/settings');
+                },
                 child: const Text('Settings'),
               ),
             )
           ],
         ),
       ),
+    );
+  }
+}
+
+class bottomBar extends StatelessWidget {
+  const bottomBar({Key? key}) : super(key: key);
+
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(
+          width: 25,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/myPets');
+          },
+          child: const Text('My Pets'),
+          style: ElevatedButton.styleFrom(primary: Colors.transparent),
+        ),
+        const SizedBox(
+          width: 50,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/lostPets');
+          },
+          child: const Text('Lost Pets'),
+          style: ElevatedButton.styleFrom(primary: Colors.transparent),
+        ),
+        const SizedBox(
+          width: 50,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/settings');
+          },
+          child: const Text('Settings'),
+          style: ElevatedButton.styleFrom(primary: Colors.transparent),
+        ),
+      ],
     );
   }
 }
