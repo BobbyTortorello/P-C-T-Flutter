@@ -6,7 +6,7 @@ import 'package:p_c_t/my_pets.dart';
 import 'package:p_c_t/new_pet.dart';
 import 'package:p_c_t/settings.dart';
 
-void main() {
+void main() async {
   runApp(const PCT());
   runApp(
     MaterialApp(
@@ -20,6 +20,7 @@ void main() {
       },
     ),
   );
+  loadData();
 }
 
 class PCT extends StatelessWidget {

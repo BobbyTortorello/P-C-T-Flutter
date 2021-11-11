@@ -1,7 +1,11 @@
+//import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 import 'package:p_c_t/main.dart';
-import 'package:p_c_t/new_pet.dart';
 import 'package:p_c_t/pet.dart';
+import 'package:sqflite/sqflite.dart';
+
+import 'package:path/path.dart';
 
 class MyPets extends StatelessWidget {
   const MyPets({Key? key}) : super(key: key);
@@ -31,17 +35,16 @@ class MyPets extends StatelessWidget {
 }
 
 class ListViewLayout extends StatelessWidget {
-  const ListViewLayout({Key? key, required this.myPet}) : super(key: key);
+  const ListViewLayout({Key? key}) : super(key: key);
 
-  final Pet myPet;
   @override
   Widget build(BuildContext context) {
+    loadData();
     return listView(context);
   }
 }
 
 List<Pet> myPets = [];
-
 Widget listView(BuildContext context) {
   return ListView.separated(
     padding: const EdgeInsets.all(8),
@@ -50,7 +53,7 @@ Widget listView(BuildContext context) {
       return ListTile(
         //leading: myPets[i].petImage,
         title: Text(myPets[i].petName),
-        subtitle: Text(myPets[i].petType + " " + myPets[i].petBreed),
+        subtitle: Text('${myPets[i].petType} - ${myPets[i].petBreed}'),
       );
     },
     separatorBuilder: (context, index) => const Divider(
@@ -58,4 +61,30 @@ Widget listView(BuildContext context) {
       thickness: 2,
     ),
   );
+}
+
+void loadData() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'));
+
+  Future<List<Pet>> pets() async {
+    final db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.query('pets');
+
+    return List.generate(maps.length, (i) {
+      myPets.add(Pet(
+        petName: maps[i]['name'],
+        petType: maps[i]['type'],
+        petBreed: maps[i]['breed'],
+      ));
+      return Pet(
+        petName: maps[i]['name'],
+        petType: maps[i]['type'],
+        petBreed: maps[i]['breed'],
+      );
+    });
+  }
+
+  print(await pets());
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:p_c_t/my_pets.dart';
 import 'package:p_c_t/pet.dart';
+
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 class AddPet extends StatelessWidget {
   const AddPet({Key? key}) : super(key: key);
@@ -94,8 +96,7 @@ class AddPetFormState extends State<AddPetForm> {
                 petName = petNameField.text;
                 petType = petTypeField.text;
                 petBreed = petBreedField.text;
-                Pet newPet = Pet(petName, petType, petBreed);
-                myPets.add(newPet);
+                savePet();
                 Navigator.pushNamed(context, '/myPets');
               },
               child: const Text('Save Pet Information'),
@@ -119,7 +120,7 @@ class AddPetFormState extends State<AddPetForm> {
             ListTile(
               onTap: () {
                 Navigator.pop(context);
-                showPhotoLibrary();
+                //showPhotoLibrary();
               },
               leading: const Icon(Icons.photo_library),
               title: const Text('Choose from Photo Library'),
@@ -130,9 +131,30 @@ class AddPetFormState extends State<AddPetForm> {
     );
   }
 
-  void showPhotoLibrary() async {
-    final imageFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    //print(file.path);
+  // void showPhotoLibrary() async {
+  //   final imageFile =
+  //       await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   //print(file.path);
+  // }
+
+  void savePet() async {
+    Future<void> insertPet(Pet pet) async {
+      final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'),
+          onCreate: (db, version) {
+        return db
+            .execute('CREATE TABLE pets(name TEXT, type TEXT, breed TEXT)');
+      }, version: 1);
+
+      final db = await database;
+
+      await db.insert(
+        'pets',
+        pet.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+
+    var newPet = Pet(petName: petName, petType: petType, petBreed: petBreed);
+    await insertPet(newPet);
   }
 }
