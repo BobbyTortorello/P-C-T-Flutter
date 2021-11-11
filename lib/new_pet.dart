@@ -97,6 +97,7 @@ class AddPetFormState extends State<AddPetForm> {
                 petType = petTypeField.text;
                 petBreed = petBreedField.text;
                 savePet();
+                loadData();
                 Navigator.pushNamed(context, '/myPets');
               },
               child: const Text('Save Pet Information'),
@@ -138,15 +139,10 @@ class AddPetFormState extends State<AddPetForm> {
   // }
 
   void savePet() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'));
     Future<void> insertPet(Pet pet) async {
-      final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'),
-          onCreate: (db, version) {
-        return db
-            .execute('CREATE TABLE pets(name TEXT, type TEXT, breed TEXT)');
-      }, version: 1);
-
       final db = await database;
-
       await db.insert(
         'pets',
         pet.toMap(),

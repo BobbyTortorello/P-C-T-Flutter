@@ -6,7 +6,16 @@ import 'package:p_c_t/my_pets.dart';
 import 'package:p_c_t/new_pet.dart';
 import 'package:p_c_t/settings.dart';
 
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  openDatabase(join(await getDatabasesPath(), 'myPets.db'),
+      onCreate: (db, version) {
+    return db.execute('CREATE TABLE pets(name TEXT, type TEXT, breed TEXT)');
+  }, version: 1);
+
   runApp(const PCT());
   runApp(
     MaterialApp(

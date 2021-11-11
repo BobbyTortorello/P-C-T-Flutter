@@ -78,6 +78,12 @@ void loadData() async {
         petType: maps[i]['type'],
         petBreed: maps[i]['breed'],
       ));
+      print(
+        Pet(
+            petName: maps[i]['name'],
+            petType: maps[i]['type'],
+            petBreed: maps[i]['breed']),
+      );
       return Pet(
         petName: maps[i]['name'],
         petType: maps[i]['type'],
