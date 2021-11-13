@@ -2,9 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:p_c_t/main.dart';
+import 'package:p_c_t/myPets/my_pet.dart';
 import 'package:p_c_t/pet.dart';
-import 'package:sqflite/sqflite.dart';
-
 import 'package:path/path.dart';
 
 class MyPets extends StatelessWidget {
@@ -54,6 +53,14 @@ Widget listView(BuildContext context) {
         //leading: myPets[i].petImage,
         title: Text(myPets[i].petName),
         subtitle: Text('${myPets[i].petType} - ${myPets[i].petBreed}'),
+        onTap: () {
+          loadPet(
+            context,
+            myPets[i].petName,
+            myPets[i].petType,
+            myPets[i].petBreed,
+          );
+        },
       );
     },
     separatorBuilder: (context, index) => const Divider(
@@ -63,34 +70,19 @@ Widget listView(BuildContext context) {
   );
 }
 
-void loadData() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'));
-
-  Future<List<Pet>> pets() async {
-    final db = await database;
-
-    final List<Map<String, dynamic>> maps = await db.query('pets');
-
-    return List.generate(maps.length, (i) {
-      myPets.add(Pet(
-        petName: maps[i]['name'],
-        petType: maps[i]['type'],
-        petBreed: maps[i]['breed'],
-      ));
-      print(
-        Pet(
-            petName: maps[i]['name'],
-            petType: maps[i]['type'],
-            petBreed: maps[i]['breed']),
-      );
-      return Pet(
-        petName: maps[i]['name'],
-        petType: maps[i]['type'],
-        petBreed: maps[i]['breed'],
-      );
-    });
-  }
-
-  print(await pets());
+void loadPet(
+  BuildContext context,
+  String petName,
+  String petType,
+  String petBreed,
+) {
+  MyPet(
+    petName: petName,
+    petBreed: petBreed,
+    petType: petType,
+  );
+  Navigator.of(context).push(MaterialPageRoute(
+    builder: (context) =>
+        MyPet(petName: petName, petBreed: petBreed, petType: petType),
+  ));
 }

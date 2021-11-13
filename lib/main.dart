@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:p_c_t/lost_pets.dart';
-import 'package:p_c_t/my_pets.dart';
-import 'package:p_c_t/new_pet.dart';
+import 'package:p_c_t/myPets/my_pets.dart';
+import 'package:p_c_t/myPets/new_pet.dart';
+import 'package:p_c_t/pet.dart';
 import 'package:p_c_t/settings.dart';
 
 import 'package:sqflite/sqflite.dart';
@@ -11,10 +12,12 @@ import 'package:path/path.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  openDatabase(join(await getDatabasesPath(), 'myPets.db'),
-      onCreate: (db, version) {
-    return db.execute('CREATE TABLE pets(name TEXT, type TEXT, breed TEXT)');
-  }, version: 1);
+  openDatabase(
+    join(await getDatabasesPath(), 'myPets.db'),
+  );
+  //     onCreate: (db, version) {
+  //   return db.execute('CREATE TABLE pets(name TEXT, type TEXT, breed TEXT)');
+  // }, version: 1);
 
   runApp(const PCT());
   runApp(
@@ -87,6 +90,7 @@ class PCT extends StatelessWidget {
   }
 }
 
+//Bottom Bar Class
 class bottomBar extends StatelessWidget {
   const bottomBar({Key? key}) : super(key: key);
 
@@ -126,4 +130,43 @@ class bottomBar extends StatelessWidget {
       ],
     );
   }
+}
+
+//Data Functions
+void loadData() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'));
+  Future<List<Pet>> pets() async {
+    final db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.query('pets');
+
+    return List.generate(maps.length, (i) {
+      myPets.add(Pet(
+        petName: maps[i]['name'],
+        petType: maps[i]['type'],
+        petBreed: maps[i]['breed'],
+      ));
+      print(
+        Pet(
+            petName: maps[i]['name'],
+            petType: maps[i]['type'],
+            petBreed: maps[i]['breed']),
+      );
+      return Pet(
+        petName: maps[i]['name'],
+        petType: maps[i]['type'],
+        petBreed: maps[i]['breed'],
+      );
+    });
+  }
+
+  await pets();
+}
+
+void deleteData() async {
+  final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'));
+  final db = await database;
+
+  await db.delete('pets');
 }
