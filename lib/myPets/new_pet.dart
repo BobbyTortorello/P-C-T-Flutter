@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:p_c_t/main.dart';
-import 'package:p_c_t/myPets/my_pets.dart';
 import 'package:p_c_t/pet.dart';
 
 import 'package:sqflite/sqflite.dart';
@@ -11,12 +10,10 @@ class AddPet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add a New Pet'),
-        centerTitle: true,
-      ),
-      body: const AddPetForm(),
+    return MaterialApp(
+      title: 'Add Pet Page',
+      theme: ThemeData(),
+      home: const AddPetForm(),
     );
   }
 }
@@ -49,6 +46,10 @@ class AddPetFormState extends State<AddPetForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Add a New Pet'),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         child: Column(
@@ -98,6 +99,7 @@ class AddPetFormState extends State<AddPetForm> {
                 petType = petTypeField.text;
                 petBreed = petBreedField.text;
                 savePet();
+                loadData();
                 Navigator.pushNamed(context, '/myPets');
               },
               child: const Text('Save Pet Information'),
@@ -152,6 +154,5 @@ class AddPetFormState extends State<AddPetForm> {
 
     var newPet = Pet(petName: petName, petType: petType, petBreed: petBreed);
     await insertPet(newPet);
-    loadData();
   }
 }

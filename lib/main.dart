@@ -15,9 +15,6 @@ void main() async {
   openDatabase(
     join(await getDatabasesPath(), 'myPets.db'),
   );
-  //     onCreate: (db, version) {
-  //   return db.execute('CREATE TABLE pets(name TEXT, type TEXT, breed TEXT)');
-  // }, version: 1);
 
   runApp(const PCT());
   runApp(
@@ -60,7 +57,8 @@ class PCT extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/myPets');
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const MyPets()));
                 },
                 child: const Text('My Pets'),
               ),
@@ -69,7 +67,8 @@ class PCT extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/lostPets');
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const LostPets()));
                 },
                 child: const Text('Lost Pets'),
               ),
@@ -78,7 +77,8 @@ class PCT extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/settings');
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const Settings()));
                 },
                 child: const Text('Settings'),
               ),
@@ -93,7 +93,7 @@ class PCT extends StatelessWidget {
 //Bottom Bar Class
 class bottomBar extends StatelessWidget {
   const bottomBar({Key? key}) : super(key: key);
-
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: [
@@ -102,7 +102,8 @@ class bottomBar extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/myPets');
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => const MyPets()));
           },
           child: const Text('My Pets'),
           style: ElevatedButton.styleFrom(primary: Colors.transparent),
@@ -112,7 +113,8 @@ class bottomBar extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/lostPets');
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const LostPets()));
           },
           child: const Text('Lost Pets'),
           style: ElevatedButton.styleFrom(primary: Colors.transparent),
@@ -122,7 +124,8 @@ class bottomBar extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/settings');
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const Settings()));
           },
           child: const Text('Settings'),
           style: ElevatedButton.styleFrom(primary: Colors.transparent),
@@ -134,6 +137,7 @@ class bottomBar extends StatelessWidget {
 
 //Data Functions
 void loadData() async {
+  myPets.clear();
   WidgetsFlutterBinding.ensureInitialized();
   final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'));
   Future<List<Pet>> pets() async {
@@ -142,22 +146,13 @@ void loadData() async {
     final List<Map<String, dynamic>> maps = await db.query('pets');
 
     return List.generate(maps.length, (i) {
-      myPets.add(Pet(
-        petName: maps[i]['name'],
-        petType: maps[i]['type'],
-        petBreed: maps[i]['breed'],
-      ));
-      print(
-        Pet(
-            petName: maps[i]['name'],
-            petType: maps[i]['type'],
-            petBreed: maps[i]['breed']),
-      );
-      return Pet(
+      Pet currentPet = Pet(
         petName: maps[i]['name'],
         petType: maps[i]['type'],
         petBreed: maps[i]['breed'],
       );
+      myPets.add(currentPet);
+      return currentPet;
     });
   }
 

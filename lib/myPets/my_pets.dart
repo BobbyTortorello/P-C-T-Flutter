@@ -3,12 +3,30 @@
 import 'package:flutter/material.dart';
 import 'package:p_c_t/main.dart';
 import 'package:p_c_t/myPets/my_pet.dart';
+import 'package:p_c_t/myPets/new_pet.dart';
 import 'package:p_c_t/pet.dart';
-import 'package:path/path.dart';
 
 class MyPets extends StatelessWidget {
   const MyPets({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'My Pets Page',
+      theme: ThemeData(),
+      home: const MyPetsPage(),
+    );
+  }
+}
+
+class MyPetsPage extends StatefulWidget {
+  const MyPetsPage({Key? key}) : super(key: key);
+
+  @override
+  MyPetsPageState createState() => MyPetsPageState();
+}
+
+class MyPetsPageState extends State<MyPetsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +36,9 @@ class MyPets extends StatelessWidget {
         actions: <Widget>[
           ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/addPet');
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const AddPet(),
+              ));
             },
             child: const Icon(Icons.add),
             style: ElevatedButton.styleFrom(primary: Colors.transparent),
@@ -27,47 +47,53 @@ class MyPets extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
       ),
-      body: listView(context),
+      body: const ListViewLayout(),
       bottomSheet: const bottomBar(),
     );
   }
 }
 
-class ListViewLayout extends StatelessWidget {
+class ListViewLayout extends StatefulWidget {
   const ListViewLayout({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    loadData();
-    return listView(context);
-  }
+  ListViewState createState() => ListViewState();
 }
 
 List<Pet> myPets = [];
-Widget listView(BuildContext context) {
-  return ListView.separated(
-    padding: const EdgeInsets.all(8),
-    itemCount: myPets.length,
-    itemBuilder: (context, i) {
-      return ListTile(
-        //leading: myPets[i].petImage,
-        title: Text(myPets[i].petName),
-        subtitle: Text('${myPets[i].petType} - ${myPets[i].petBreed}'),
-        onTap: () {
-          loadPet(
-            context,
-            myPets[i].petName,
-            myPets[i].petType,
-            myPets[i].petBreed,
-          );
-        },
-      );
-    },
-    separatorBuilder: (context, index) => const Divider(
-      color: Colors.grey,
-      thickness: 2,
-    ),
-  );
+
+class ListViewState extends State<ListViewLayout> {
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: const EdgeInsets.all(8),
+      itemCount: myPets.length,
+      itemBuilder: (context, i) {
+        return ListTile(
+          //leading: myPets[i].petImage,
+          title: Text(myPets[i].petName),
+          subtitle: Text('${myPets[i].petType} - ${myPets[i].petBreed}'),
+          onTap: () {
+            loadPet(
+              context,
+              myPets[i].petName,
+              myPets[i].petType,
+              myPets[i].petBreed,
+            );
+          },
+        );
+      },
+      separatorBuilder: (context, index) => const Divider(
+        color: Colors.grey,
+        thickness: 2,
+      ),
+    );
+  }
 }
 
 void loadPet(
