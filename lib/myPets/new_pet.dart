@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:p_c_t/main.dart';
+import 'package:p_c_t/myPets/my_pets.dart';
 import 'package:p_c_t/pet.dart';
 
 import 'package:sqflite/sqflite.dart';
@@ -99,8 +100,8 @@ class AddPetFormState extends State<AddPetForm> {
                 petType = petTypeField.text;
                 petBreed = petBreedField.text;
                 savePet();
-                loadData();
-                Navigator.pushNamed(context, '/myPets');
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const MyPets()));
               },
               child: const Text('Save Pet Information'),
             ),
