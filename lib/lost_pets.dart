@@ -10,6 +10,7 @@ class LostPets extends StatelessWidget {
       title: 'Lost Pets Page',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(color: Colors.amber),
+        backgroundColor: Colors.grey.shade400,
       ),
       home: const LostPetsPage(),
     );

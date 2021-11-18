@@ -9,7 +9,7 @@ class Settings extends StatelessWidget {
     return MaterialApp(
       title: 'Settings Page',
       theme: ThemeData(),
-      home: SettingsPage(),
+      home: const SettingsPage(),
     );
   }
 }

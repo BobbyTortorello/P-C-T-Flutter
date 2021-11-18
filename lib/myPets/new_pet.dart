@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:p_c_t/main.dart';
 import 'package:p_c_t/myPets/my_pets.dart';
 import 'package:p_c_t/pet.dart';
 
