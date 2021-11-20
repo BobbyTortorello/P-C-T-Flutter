@@ -47,6 +47,12 @@ class AddPetFormState extends State<AddPetForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: ElevatedButton(
+          onPressed: () {
+            cancelAlertDialog(context);
+          },
+          child: const Icon(Icons.arrow_back_ios_sharp),
+        ),
         title: const Text('Add a New Pet'),
         centerTitle: true,
       ),
@@ -155,4 +161,34 @@ class AddPetFormState extends State<AddPetForm> {
     var newPet = Pet(petName: petName, petType: petType, petBreed: petBreed);
     await insertPet(newPet);
   }
+}
+
+cancelAlertDialog(BuildContext context) {
+  Widget yesButton = ElevatedButton(
+    onPressed: () {
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => const MyPets()));
+    },
+    child: const Text('Yes'),
+  );
+
+  Widget noButton = ElevatedButton(
+    onPressed: () {
+      Navigator.of(context, rootNavigator: true).pop();
+    },
+    child: const Text('No'),
+  );
+
+  AlertDialog alert = AlertDialog(
+    title: const Text("Stop Adding Pet?"),
+    content: const Text("Are you sure you want to stop adding a new pet?"),
+    actions: [yesButton, noButton],
+  );
+
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      });
 }

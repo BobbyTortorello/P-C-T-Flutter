@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:p_c_t/myPets/my_pets.dart';
 
 class MyPet extends StatelessWidget {
   const MyPet(
@@ -60,6 +61,13 @@ class MyPetPageState extends State<MyPetPage> {
       appBar: AppBar(
         title: Text(petName),
         centerTitle: true,
+        leading: ElevatedButton(
+          onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => const MyPets()));
+          },
+          child: const Icon(Icons.arrow_back_ios_sharp),
+        ),
       ),
       body: Column(
         children: <Widget>[
