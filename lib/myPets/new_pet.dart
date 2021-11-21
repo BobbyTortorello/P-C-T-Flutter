@@ -1,4 +1,9 @@
+// ignore_for_file: unnecessary_null_comparison
+
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:p_c_t/myPets/my_pets.dart';
 import 'package:p_c_t/pet.dart';
 
@@ -33,7 +38,8 @@ class AddPetFormState extends State<AddPetForm> {
   String petName = '';
   String petType = '';
   String petBreed = '';
-  String petImagePath = '';
+  Image petImage = Image.asset('assets/placeholderImage.jpg');
+
   @override
   void dispose() {
     petNameField.dispose();
@@ -90,6 +96,7 @@ class AddPetFormState extends State<AddPetForm> {
             const SizedBox(
               height: 15,
             ),
+            SizedBox(width: 150, height: 150, child: petImage),
             ElevatedButton(
               onPressed: () {
                 showOptions(context);
@@ -122,14 +129,18 @@ class AddPetFormState extends State<AddPetForm> {
       builder: (BuildContext context) {
         return Column(
           children: <Widget>[
-            const ListTile(
-              leading: Icon(Icons.photo_camera),
-              title: Text('Take Picture with Camera'),
+            ListTile(
+              onTap: () {
+                Navigator.pop(context);
+                imageFromCamera;
+              },
+              leading: const Icon(Icons.photo_camera),
+              title: const Text('Take Picture with Camera'),
             ),
             ListTile(
               onTap: () {
                 Navigator.pop(context);
-                //showPhotoLibrary();
+                imageFromGallery();
               },
               leading: const Icon(Icons.photo_library),
               title: const Text('Choose from Photo Library'),
@@ -140,11 +151,31 @@ class AddPetFormState extends State<AddPetForm> {
     );
   }
 
-  // void showPhotoLibrary() async {
-  //   final imageFile =
-  //       await ImagePicker().pickImage(source: ImageSource.gallery);
-  //   //print(file.path);
-  // }
+  imageFromCamera() async {
+    XFile? image = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      imageQuality: 50,
+    );
+    File imageFile = File(image!.path);
+    final Uint8List bytes = imageFile.readAsBytes() as Uint8List;
+    setState(() {
+      petImage = Image.memory(bytes);
+    });
+  }
+
+  imageFromGallery() async {
+    XFile? image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+    File imageFile = File(image!.path);
+    final Uint8List bytes = imageFile.readAsBytes() as Uint8List;
+    setState(() {
+      petImage = Image.memory(bytes);
+    });
+  }
+
+  void updateImage(File image) {}
 
   void savePet() async {
     WidgetsFlutterBinding.ensureInitialized();
