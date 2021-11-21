@@ -1,9 +1,9 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:p_c_t/main.dart';
 import 'package:p_c_t/myPets/my_pets.dart';
 import 'package:p_c_t/pet.dart';
 
@@ -15,6 +15,7 @@ class AddPet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    loadData();
     return MaterialApp(
       title: 'Add Pet Page',
       theme: ThemeData(),
@@ -25,7 +26,6 @@ class AddPet extends StatelessWidget {
 
 class AddPetForm extends StatefulWidget {
   const AddPetForm({Key? key}) : super(key: key);
-
   @override
   AddPetFormState createState() => AddPetFormState();
 }
@@ -38,7 +38,8 @@ class AddPetFormState extends State<AddPetForm> {
   String petName = '';
   String petType = '';
   String petBreed = '';
-  Image petImage = Image.asset('assets/placeholderImage.jpg');
+  Image placeholderImage = Image.asset('assets/placeholderImage.jpg');
+  String petImage = '';
 
   @override
   void dispose() {
@@ -96,7 +97,11 @@ class AddPetFormState extends State<AddPetForm> {
             const SizedBox(
               height: 15,
             ),
-            SizedBox(width: 150, height: 150, child: petImage),
+            Image(
+              image: placeholderImage.image,
+              width: 150,
+              height: 150,
+            ),
             ElevatedButton(
               onPressed: () {
                 showOptions(context);
@@ -156,10 +161,11 @@ class AddPetFormState extends State<AddPetForm> {
       source: ImageSource.camera,
       imageQuality: 50,
     );
-    File imageFile = File(image!.path);
-    final Uint8List bytes = imageFile.readAsBytes() as Uint8List;
+    String imageFile = image!.path;
+    // final Uint8List bytes = imageFile.readAsBytesSync();
     setState(() {
-      petImage = Image.memory(bytes);
+      petImage = imageFile;
+      placeholderImage = Image.file(File(imageFile));
     });
   }
 
@@ -168,32 +174,40 @@ class AddPetFormState extends State<AddPetForm> {
       source: ImageSource.gallery,
       imageQuality: 50,
     );
-    File imageFile = File(image!.path);
-    final Uint8List bytes = imageFile.readAsBytes() as Uint8List;
+    String imageFile = image!.path;
+    // final Uint8List bytes = imageFile.readAsBytesSync();
     setState(() {
-      petImage = Image.memory(bytes);
+      petImage = imageFile;
+      placeholderImage = Image.file(File(imageFile));
     });
   }
 
-  void updateImage(File image) {}
-
   void savePet() async {
     WidgetsFlutterBinding.ensureInitialized();
-    final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'));
+    final database = openDatabase(
+      join(await getDatabasesPath(), 'pets.db'),
+    );
+
     Future<void> insertPet(Pet pet) async {
       final db = await database;
       await db.insert(
-        'pets',
+        'my_pets',
         pet.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }
 
-    var newPet = Pet(petName: petName, petType: petType, petBreed: petBreed);
+    var newPet = Pet(
+      petName: petName,
+      petType: petType,
+      petBreed: petBreed,
+      petImage: petImage,
+    );
     await insertPet(newPet);
   }
 }
 
+//MARK: Cancel Adding New Pet Dialog
 cancelAlertDialog(BuildContext context) {
   Widget yesButton = ElevatedButton(
     onPressed: () {
@@ -218,8 +232,9 @@ cancelAlertDialog(BuildContext context) {
   );
 
   showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      });
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

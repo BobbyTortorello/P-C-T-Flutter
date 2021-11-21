@@ -1,10 +1,12 @@
 //import 'dart:js_util';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:p_c_t/main.dart';
 import 'package:p_c_t/myPets/my_pet.dart';
 import 'package:p_c_t/myPets/new_pet.dart';
 import 'package:p_c_t/pet.dart';
+import 'package:path/path.dart';
 
 class MyPets extends StatelessWidget {
   const MyPets({Key? key}) : super(key: key);
@@ -75,15 +77,26 @@ class ListViewState extends State<ListViewLayout> {
       itemCount: myPets.length,
       itemBuilder: (context, i) {
         return ListTile(
-          //leading: myPets[i].petImage,
-          title: Text(myPets[i].petName),
-          subtitle: Text('${myPets[i].petType} - ${myPets[i].petBreed}'),
+          leading: Image.file(
+            File(myPets[i].petImage),
+            height: 100,
+            width: 100,
+          ),
+          title: Text(
+            myPets[i].petName,
+            style: const TextStyle(fontSize: 25),
+          ),
+          subtitle: Text(
+            '${myPets[i].petType} - ${myPets[i].petBreed}',
+            style: const TextStyle(fontSize: 20),
+          ),
           onTap: () {
             loadPet(
               context,
               myPets[i].petName,
               myPets[i].petType,
               myPets[i].petBreed,
+              myPets[i].petImage,
             );
           },
         );
@@ -101,14 +114,20 @@ void loadPet(
   String petName,
   String petType,
   String petBreed,
+  String petImage,
 ) {
   MyPet(
     petName: petName,
     petBreed: petBreed,
     petType: petType,
+    petImage: petImage,
   );
   Navigator.of(context).push(MaterialPageRoute(
-    builder: (context) =>
-        MyPet(petName: petName, petBreed: petBreed, petType: petType),
+    builder: (context) => MyPet(
+      petName: petName,
+      petBreed: petBreed,
+      petType: petType,
+      petImage: petImage,
+    ),
   ));
 }

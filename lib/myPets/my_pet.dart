@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:p_c_t/myPets/my_pets.dart';
 
@@ -6,12 +8,14 @@ class MyPet extends StatelessWidget {
       {Key? key,
       required this.petName,
       required this.petType,
-      required this.petBreed})
+      required this.petBreed,
+      required this.petImage})
       : super(key: key);
 
   final String petName;
   final String petType;
   final String petBreed;
+  final String petImage;
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +23,10 @@ class MyPet extends StatelessWidget {
       title: 'My Pet Page',
       theme: ThemeData(),
       home: MyPetPage(
-        petName: petName,
-        petType: petType,
-        petBreed: petBreed,
-      ),
+          petName: petName,
+          petType: petType,
+          petBreed: petBreed,
+          petImage: petImage),
     );
   }
 }
@@ -32,16 +36,21 @@ class MyPetPage extends StatefulWidget {
       {Key? key,
       required this.petName,
       required this.petBreed,
-      required this.petType})
+      required this.petType,
+      required this.petImage})
       : super(key: key);
 
   final String petName;
   final String petType;
   final String petBreed;
+  final String petImage;
 
   @override
-  MyPetPageState createState() =>
-      MyPetPageState(petName: petName, petBreed: petBreed, petType: petType);
+  MyPetPageState createState() => MyPetPageState(
+      petName: petName,
+      petBreed: petBreed,
+      petType: petType,
+      petImage: petImage);
 }
 
 class MyPetPageState extends State<MyPetPage> {
@@ -49,11 +58,13 @@ class MyPetPageState extends State<MyPetPage> {
       {Key? key,
       required this.petName,
       required this.petBreed,
-      required this.petType});
+      required this.petType,
+      required this.petImage});
 
   final String petName;
   final String petType;
   final String petBreed;
+  final String petImage;
 
   @override
   Widget build(BuildContext context) {
@@ -81,8 +92,10 @@ class MyPetPageState extends State<MyPetPage> {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              const Icon(
-                Icons.zoom_out,
+              SizedBox(
+                child: Image.file(File(petImage)),
+                width: 150,
+                height: 150,
               ),
               const SizedBox(
                 width: 70.0,

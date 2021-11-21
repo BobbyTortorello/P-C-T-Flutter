@@ -2,13 +2,13 @@ class Pet {
   final String petName;
   final String petType;
   final String petBreed;
-  //Image petImage;
+  final String petImage;
 
   Pet({
     required this.petName,
     required this.petType,
     required this.petBreed,
-    /*this.petImage*/
+    required this.petImage,
   });
 
   Map<String, dynamic> toMap() {
@@ -16,11 +16,12 @@ class Pet {
       'name': petName,
       'type': petType,
       'breed': petBreed,
+      'image': petImage,
     };
   }
 
   @override
   String toString() {
-    return 'Pet{name: $petName, type: $petType, breed: $petBreed}';
+    return 'Pet{name: $petName, type: $petType, breed: $petBreed, image: $petImage}';
   }
 }

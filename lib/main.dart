@@ -12,10 +12,11 @@ import 'package:path/path.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  openDatabase(
-    join(await getDatabasesPath(), 'myPets.db'),
-  );
-
+  var database = openDatabase(join(await getDatabasesPath(), 'pets.db'),
+      onCreate: (db, version) {
+    return db.execute(
+        'CREATE TABLE my_pets(name TEXT, type TEXT, breed TEXT, image TEXT)');
+  }, version: 5);
   runApp(const PCT());
   runApp(
     MaterialApp(
@@ -29,6 +30,7 @@ void main() async {
       },
     ),
   );
+  database = database;
   loadData();
 }
 
@@ -79,6 +81,7 @@ class PCT extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const Settings()));
+                  //deleteData();
                 },
                 child: const Text('Settings'),
               ),
@@ -139,19 +142,22 @@ class bottomBar extends StatelessWidget {
 void loadData() async {
   myPets.clear();
   WidgetsFlutterBinding.ensureInitialized();
-  final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'));
+  final database = openDatabase(join(await getDatabasesPath(), 'pets.db'));
   Future<List<Pet>> pets() async {
     final db = await database;
 
-    final List<Map<String, dynamic>> maps = await db.query('pets');
+    final List<Map<String, dynamic>> maps = await db.query('my_pets');
 
     return List.generate(maps.length, (i) {
       Pet currentPet = Pet(
         petName: maps[i]['name'],
         petType: maps[i]['type'],
         petBreed: maps[i]['breed'],
+        petImage: maps[i]['image'],
       );
       myPets.add(currentPet);
+      // ignore: avoid_print
+      print(currentPet);
       return currentPet;
     });
   }
@@ -163,5 +169,22 @@ void deleteData() async {
   final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'));
   final db = await database;
 
-  await db.delete('pets');
+  await db.delete('my_pets');
+}
+
+void createDB(Database db, int newVersion) async {
+  await db.execute(
+      "CREATE TABLE pets(name TEXT, type TEXT, breed TEXT, image TEXT)");
+}
+
+void updateDB(Database db, int oldVersion, int newVersion) async {
+  if (oldVersion < newVersion) {
+    db.execute("ALTER TABLE pets ADD COLUMN image TEXT;");
+  }
+}
+
+initDB() async {
+  final database = openDatabase(join(await getDatabasesPath(), 'myPets.db'),
+      onCreate: createDB, onUpgrade: updateDB);
+  return database;
 }
